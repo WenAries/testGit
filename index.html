@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>weather</title>
+    <link rel="stylesheet" type="text/css" href="css/aui.2.0.css"/>
+    <link rel="stylesheet" type="text/css" href="css/font/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="css/weather.css"/>
+</head>
+
+<body class="data">
+<div class="cloth">
+    <img src="img/jgz.gif"/>
+</div>
+
+<header class="aui-bar aui-bar-nav aui-content" id="header">
+    <span class="iconfont icon-tianqi1"></span>
+    <span>{{basic.city}} {{now.cond.txt}}</span>
+</header>
+<div class="aui-content">
+    <div class="img-box">
+        <div class="kb"></div>
+        <p>
+            <span style="font-size: 46px;color: white;">{{now.fl}}°</span>
+        </p>
+        <p style="color: white;">
+            <span class="p-12">{{basic.city}}</span>|
+            <span class="p-12">{{now.cond.txt}}</span>
+        </p>
+        <div class="content-footer">
+            <div class="small-box">
+                <p class="p-12">{{now.wind.dir}}</p>
+                <p class="p-18">{{now.wind.sc}}</p>
+            </div>
+            <div class="small-box has-bor">
+                <p class="p-12">相对湿度</p>
+                <p class="p-18">{{now.hum}}</p>
+            </div>
+            <div class="small-box">
+                <p class="p-12">空气{{now.cond.txt}}</p>
+                <p class="p-18">{{aqi.city.aqi}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="weather-list aui-content">
+    <ul class="aui-list aui-list-in">
+        <li class="aui-list-item" v-for="item in daily_forecast3">
+            <div class="aui-list-item-label-icon">
+                <span class="iconfont" v-bind:class="item.cond.txt_d | setIcon"></span>
+            </div>
+            <div class="aui-list-item-inner set-pad">
+                <div class="w-left aui-pull-left">
+                    <p class="p-16">{{item.date | setDate}}</p>
+                    <p><span>{{item.cond.txt_d}}&nbsp;</span><span>|&nbsp;{{item.hum}}</span></p>
+                </div>
+                <div class="w-right aui-pull-right">
+                    {{item.tmp.min}}°/{{item.tmp.max}}°
+                </div>
+            </div>
+        </li>
+
+        <li class="aui-list-item aui-list-item-middle aui-text-center">
+            <div class="aui-list-item-inner aui-text-center" id="show_table">
+                未来几天温度趋势
+            </div>
+        </li>
+        <li>
+            <div id="weather_table"></div>
+        </li>
+        <li class="aui-list-item aui-list-item-middle" id="show_kqTable">
+            <div class="aui-list-item-inner">
+                空气质量指数
+            </div>
+        </li>
+        <li>
+            <div id="kq_table"></div>
+        </li>
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner">生活指南</div>
+        </li>
+
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                <img src="img/j_dog.gif" class="aui-pull-left zs"/>
+                <div class="aui-pull-right set-pad aui-pull-left" style="padding-left: 10px">
+                    <p style="color: black;">舒适度：<span>{{sugg.comf.brf}}</span></p>
+                    <p class="p-12 aui-ellipsis-2">{{sugg.comf.txt}}</p>
+                </div>
+            </div>
+        </li>
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                <span class="iconfont icon-xiayu aui-pull-left" style="font-size: 40px;"></span>
+                <div class="aui-pull-right set-pad" style="padding-left: 10px">
+                    <p style="color: black;">洗车指数：<span>{{sugg.cw.brf}}</span></p>
+                    <p class="p-12 aui-ellipsis-2">{{sugg.cw.txt}}</p>
+                </div>
+            </div>
+        </li>
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                <span class="iconfont icon-xiayu aui-pull-left" style="font-size: 40px;"></span>
+                <div class="aui-pull-right set-pad" style="padding-left: 10px">
+                    <p style="color: black;">运动指数：<span>{{sugg.sport.brf}}</span></p>
+                    <p class="p-12 aui-ellipsis-2">{{sugg.sport.txt}}</p>
+                </div>
+            </div>
+        </li>
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                <span class="iconfont icon-xiayu aui-pull-left" style="font-size: 40px;"></span>
+                <div class="aui-pull-right set-pad aui-pull-left" style="padding-left: 10px">
+                    <p style="color: black;">穿衣指数：<span>{{sugg.drsg.brf}}</span></p>
+                    <p class="p-12 aui-ellipsis-2">{{sugg.drsg.txt}}</p>
+                </div>
+            </div>
+        </li>
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                <span class="iconfont icon-xiayu aui-pull-left" style="font-size: 40px;"></span>
+                <div class="aui-pull-right set-pad aui-pull-left" style="padding-left: 10px">
+                    <p style="color: black;">感冒指数：<span>{{sugg.flu.brf}}</span></p>
+                    <p class="p-12 aui-ellipsis-2">{{sugg.flu.txt}}</p>
+                </div>
+            </div>
+        </li>
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                <span class="iconfont icon-xiayu aui-pull-left" style="font-size: 40px;"></span>
+                <div class="aui-pull-right set-pad aui-pull-left" style="padding-left: 10px">
+                    <p style="color: black;">旅游指数：<span>{{sugg.trav.brf}}</span></p>
+                    <p class="p-12 aui-ellipsis-2">{{sugg.trav.txt}}</p>
+                </div>
+            </div>
+        </li>
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                <span class="iconfont icon-xiayu aui-pull-left" style="font-size: 40px;"></span>
+                <div class="aui-pull-right set-pad aui-pull-left" style="padding-left: 10px">
+                    <p style="color: black;">紫外线指数：<span>{{sugg.uv.brf}}</span></p>
+                    <p class="p-12 aui-ellipsis-2">{{sugg.uv.txt}}</p>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+</body>
+<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/vue.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/api.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/app.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="css/font/iconfont.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/aui-toast.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/helper.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/weather.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    apiready = function () {
+        api.parseTapmode();
+    }
+</script>
+
+</html>
